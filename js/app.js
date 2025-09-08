@@ -114,7 +114,9 @@ class MetroApp {
             { name: 'dashboard', class: DashboardModule },
             { name: 'liveMap', class: LiveMapModule },
             { name: 'trainOperations', class: TrainOperationsModule },
-            { name: 'verifyOperations', class: VerifyOperationsModule }
+            { name: 'verifyOperations', class: VerifyOperationsModule },
+            { name: 'reports', class: ReportsModule },
+            { name: 'operations', class: OperationsModule }
         ];
 
         for (const module of modules) {

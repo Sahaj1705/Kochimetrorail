@@ -2476,6 +2476,93 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.staff-card {
+    background: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+}
+
+.staff-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.staff-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #14b8a6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.staff-info h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.staff-info p {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.staff-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+.staff-status.on-duty {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.staff-status.off-duty {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.staff-status.break {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.staff-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.staff-details .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.staff-details .detail-row span {
+    color: #6b7280;
+}
+
+.staff-details .detail-row strong {
+    color: #1f2937;
+}
+
 .border {
     border: 1px solid #e5e7eb;
 }
