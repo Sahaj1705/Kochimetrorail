@@ -28,9 +28,20 @@
                     <input type="text" placeholder="Search trains, stations, officers...">
                 </div>
                 
-                <div class="auth-buttons">
-                    <button class="btn-login">Login</button>
-                    <button class="btn-signup">Sign Up</button>
+                <div class="auth-buttons" id="auth-buttons">
+                    <button class="btn-login" onclick="window.location.href='login.html'">Login</button>
+                    <button class="btn-signup" onclick="window.location.href='signup.html'">Sign Up</button>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-info">
+                        <span class="user-name" id="user-name"></span>
+                        <span class="user-role" id="user-role"></span>
+                    </div>
+                    <button class="btn-logout" id="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
                 </div>
                 
                 <button class="icon-btn" id="qr-scanner-btn" title="QR Code Scanner">
@@ -1331,5 +1342,31 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Check authentication status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+        });
+        
+        function updateAuthUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userMenu = document.getElementById('user-menu');
+            const userName = document.getElementById('user-name');
+            const userRole = document.getElementById('user-role');
+            
+            if (checkAuthStatus()) {
+                // User is logged in
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = currentUser.name;
+                userRole.textContent = currentUser.role;
+            } else {
+                // User is not logged in
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
