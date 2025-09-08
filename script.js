@@ -84,24 +84,11 @@ function hideModal(modalId) {
 function initializeNotifications() {
     const notificationBtn = document.getElementById('notification-btn');
     const notificationDropdown = document.getElementById('notification-dropdown');
-    const refreshBtn = document.getElementById('refresh-btn');
     
     if (notificationBtn && notificationDropdown) {
         notificationBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             notificationDropdown.classList.toggle('show');
-        });
-    }
-    
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', () => {
-            // Animate refresh button
-            refreshBtn.style.transform = 'rotate(360deg)';
-            setTimeout(() => {
-                refreshBtn.style.transform = '';
-            }, 500);
-            
-            showSuccessMessage('Dashboard refreshed successfully!');
         });
     }
     
@@ -284,6 +271,28 @@ function simulateRealTimeUpdates() {
             train.style.top = `${Math.max(0, newTop)}px`;
         });
     }, 10000); // Update every 10 seconds
+}
+
+// Check authentication status and update header
+function updateHeaderAuth() {
+    const authButtons = document.getElementById('auth-buttons');
+    const userSection = document.getElementById('user-section');
+    const userName = document.getElementById('user-name');
+    const userRole = document.getElementById('user-role');
+    
+    const currentUser = getCurrentUser();
+    
+    if (currentUser) {
+        // User is logged in - show user menu, hide auth buttons
+        if (authButtons) authButtons.style.display = 'none';
+        if (userSection) userSection.style.display = 'flex';
+        if (userName) userName.textContent = currentUser.name || 'User';
+        if (userRole) userRole.textContent = currentUser.role || 'Employee';
+    } else {
+        // User is not logged in - show auth buttons, hide user menu
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userSection) userSection.style.display = 'none';
+    }
 }
 
 // Initialize real-time updates
