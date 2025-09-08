@@ -3,1366 +3,722 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kochi Metro Rail Corporation Employee Dashboard</title>
+    <title>Kochi Metro Rail Corporation - Operations Dashboard</title>
+    <meta name="description" content="Advanced operations dashboard for Kochi Metro Rail Corporation">
+    <meta name="keywords" content="metro, rail, transportation, dashboard, operations">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚇</text></svg>">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="header-left">
-                <div class="logo">
-                    <div class="logo-icon">K</div>
-                    <div class="logo-text">
-                        <h1>Kochi Metro Service</h1>
-                        <p>Employee Operations Dashboard</p>
-                    </div>
-                </div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen" aria-hidden="true">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-subway" aria-hidden="true"></i>
             </div>
-            
-            <div class="header-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search trains, stations, officers...">
-                </div>
-                
-                <div class="auth-buttons" id="auth-buttons">
-                    <button class="btn-login" onclick="window.location.href='login.html'">Login</button>
-                    <button class="btn-signup" onclick="window.location.href='signup.html'">Sign Up</button>
-                </div>
-                
-                <div class="user-menu" id="user-menu" style="display: none;">
-                    <div class="user-info">
-                        <span class="user-name" id="user-name"></span>
-                        <span class="user-role" id="user-role"></span>
-                    </div>
-                    <button class="btn-logout" id="logout-btn" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
-                </div>
-                
-                <button class="icon-btn" id="qr-scanner-btn" title="QR Code Scanner">
-                    <i class="fas fa-qrcode"></i>
-                </button>
-                
-                <div class="notification-container">
-                    <button class="icon-btn" id="notification-btn" title="Notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="notification-dropdown" id="notification-dropdown">
-                        <div class="notification-header">
-                            <h3>Notifications</h3>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notification-dot warning"></div>
-                            <div class="notification-content">
-                                <p>Train K-101 delayed by 5 minutes at Aluva</p>
-                                <span class="notification-time">2 min ago</span>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notification-dot info"></div>
-                            <div class="notification-content">
-                                <p>Maintenance scheduled for Line 1 at 10:00 PM</p>
-                                <span class="notification-time">15 min ago</span>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notification-dot success"></div>
-                            <div class="notification-content">
-                                <p>New officer assigned to Ernakulam South</p>
-                                <span class="notification-time">1 hour ago</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+            <div class="loading-text">Loading Dashboard...</div>
+            <div class="loading-spinner" aria-hidden="true"></div>
         </div>
-        
-        <!-- Navigation -->
-        <nav class="nav-bar">
-            <div class="nav-content">
-                <div class="nav-items">
-                    <button class="nav-item active" data-tab="dashboard">
-                        <i class="fas fa-home"></i>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app-container">
+        <!-- Header Component -->
+        <header class="header" role="banner">
+            <div class="header-content">
+                <!-- Logo Section -->
+                <div class="header-left">
+                    <div class="logo" role="img" aria-label="Kochi Metro Logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-subway" aria-hidden="true"></i>
+                        </div>
+                        <div class="logo-text">
+                            <h1>Kochi Metro</h1>
+                            <p>Rail Corporation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Actions -->
+                <div class="header-center">
+                    <div class="search-container">
+                        <div class="search-box" role="search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input 
+                                type="search" 
+                                id="global-search"
+                                placeholder="Search trains, stations, or operations..."
+                                aria-label="Global search"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Actions -->
+                <div class="header-right">
+                    <!-- QR Scanner -->
+                    <button 
+                        class="icon-btn" 
+                        id="qr-scanner-btn"
+                        aria-label="Open QR Scanner"
+                        title="QR Scanner"
+                    >
+                        <i class="fas fa-qrcode" aria-hidden="true"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <div class="notification-container">
+                        <button 
+                            class="icon-btn" 
+                            id="notification-btn"
+                            aria-label="View notifications"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                        >
+                            <i class="fas fa-bell" aria-hidden="true"></i>
+                            <span class="notification-badge" id="notification-count">3</span>
+                        </button>
+                        
+                        <div class="notification-dropdown" id="notification-dropdown" role="menu">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                            </div>
+                            <div class="notification-list" role="group">
+                                <!-- Notifications will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Authentication Buttons (for non-authenticated users) -->
+                    <div class="auth-buttons" id="auth-buttons">
+                        <a href="login.html" class="btn-login">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="btn-signup">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+
+                    <!-- User Menu (for authenticated users) -->
+                    <div class="user-section" id="user-section" style="display: none;">
+                        <div class="user-info">
+                            <div class="user-name" id="user-name">John Doe</div>
+                            <div class="user-role" id="user-role">Administrator</div>
+                        </div>
+                        <button class="btn-logout" id="logout-btn" aria-label="Logout">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button 
+                        class="mobile-menu-toggle" 
+                        id="mobile-menu-toggle"
+                        aria-label="Toggle mobile menu"
+                        aria-expanded="false"
+                    >
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="nav-bar" role="navigation" aria-label="Main navigation">
+                <div class="nav-content">
+                    <div class="nav-items">
+                        <button class="nav-item active" data-tab="dashboard" aria-pressed="true">
+                            <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </button>
+                        <button class="nav-item" data-tab="live-map" aria-pressed="false">
+                            <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+                            <span>Live Map</span>
+                        </button>
+                        <button class="nav-item" data-tab="train-operations" aria-pressed="false">
+                            <i class="fas fa-train" aria-hidden="true"></i>
+                            <span>Train Operations</span>
+                        </button>
+                        <button class="nav-item" data-tab="verify-operations" aria-pressed="false">
+                            <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                            <span>Verify Operations</span>
+                        </button>
+                        <div class="nav-dropdown" id="reports-dropdown">
+                            <button class="nav-item" aria-expanded="false" aria-haspopup="true">
+                                <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                                <span>Reports</span>
+                                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </button>
+                            <div class="nav-dropdown-content" role="menu">
+                                <button class="nav-dropdown-item" role="menuitem">Daily Reports</button>
+                                <button class="nav-dropdown-item" role="menuitem">Performance Analytics</button>
+                                <button class="nav-dropdown-item" role="menuitem">Maintenance Logs</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Mobile Navigation -->
+            <nav class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+                <div class="mobile-nav-content">
+                    <button class="mobile-nav-item active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
                         <span>Dashboard</span>
                     </button>
-                    
-                    <div class="nav-dropdown">
-                        <button class="nav-item" data-tab="operations">
-                            <i class="fas fa-train"></i>
-                            <span>Operations</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="nav-dropdown-content">
-                            <button class="nav-dropdown-item" data-tab="live-map">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Live Metro Map</span>
-                            </button>
-                            <button class="nav-dropdown-item" data-tab="train-status">
-                                <i class="fas fa-train"></i>
-                                <span>Train Operations</span>
-                            </button>
-                            <button class="nav-dropdown-item" data-tab="verify-ops">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Verify Operations</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="nav-dropdown">
-                        <button class="nav-item" data-tab="management">
-                            <i class="fas fa-users"></i>
-                            <span>Management</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="nav-dropdown-content">
-                            <button class="nav-dropdown-item" data-tab="officers">
-                                <i class="fas fa-users"></i>
-                                <span>Officer Directory</span>
-                            </button>
-                            <button class="nav-dropdown-item" data-tab="history">
-                                <i class="fas fa-clock"></i>
-                                <span>History & Records</span>
-                            </button>
-                            <button class="nav-dropdown-item" data-tab="incidents">
-                                <i class="fas fa-file-alt"></i>
-                                <span>Incident Log</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <button class="nav-item" data-tab="reports">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reports</span>
+                    <button class="mobile-nav-item" data-tab="live-map">
+                        <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+                        <span>Live Map</span>
+                    </button>
+                    <button class="mobile-nav-item" data-tab="train-operations">
+                        <i class="fas fa-train" aria-hidden="true"></i>
+                        <span>Train Operations</span>
+                    </button>
+                    <button class="mobile-nav-item" data-tab="verify-operations">
+                        <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                        <span>Verify Operations</span>
                     </button>
                     
-                    <button class="nav-item" data-tab="settings">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </button>
+                    <!-- Mobile Auth Section -->
+                    <div class="mobile-auth" id="mobile-auth">
+                        <a href="login.html" class="btn-login">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="btn-signup">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </nav>
-        
-        <!-- Mobile Navigation -->
-        <div class="mobile-nav" id="mobile-nav">
-            <div class="mobile-nav-content">
-                <button class="mobile-nav-item" data-tab="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="live-map">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Live Metro Map</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="train-status">
-                    <i class="fas fa-train"></i>
-                    <span>Train Operations</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="verify-ops">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Verify Operations</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="officers">
-                    <i class="fas fa-users"></i>
-                    <span>Officer Directory</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="history">
-                    <i class="fas fa-clock"></i>
-                    <span>History & Records</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="reports">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reports</span>
-                </button>
-                <button class="mobile-nav-item" data-tab="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </button>
-                
-                <div class="mobile-auth">
-                    <button class="btn-login mobile">Employee Login</button>
-                    <button class="btn-signup mobile">Employee Sign Up</button>
-                </div>
-            </div>
-        </div>
-    </header>
+            </nav>
+        </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Dashboard Tab -->
-        <div class="tab-content active" id="dashboard-tab">
-            <!-- Welcome Header -->
-            <div class="welcome-header">
-                <h1>Welcome to Kochi Metro Rail Corporation</h1>
-                <p>Employee Operations Portal - Connecting Communities, Enhancing Lives</p>
-            </div>
-            
-            <!-- Authentication Portal -->
-            <div class="auth-portal">
-                <div class="auth-card login-card">
-                    <div class="auth-card-content">
-                        <i class="fas fa-user-circle auth-icon"></i>
-                        <h3>Employee Login</h3>
-                        <p>Access your dashboard, monitor operations, and manage metro services. Sign in to continue with your employee account.</p>
-                        <button class="auth-btn login-btn">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Sign In to Dashboard
-                        </button>
+        <!-- Main Content Area -->
+        <main class="main-content" role="main">
+            <!-- Dashboard Tab -->
+            <section id="dashboard-tab" class="tab-content active" role="tabpanel" aria-labelledby="dashboard">
+                <!-- Welcome Section -->
+                <div class="welcome-header">
+                    <h1>Welcome to Kochi Metro Operations Center</h1>
+                    <p>Monitor and manage metro operations in real-time</p>
+                </div>
+
+                <!-- Authentication Portal (for non-authenticated users) -->
+                <div class="auth-portal" id="auth-portal">
+                    <div class="auth-card login-card">
+                        <div class="auth-card-content">
+                            <div class="auth-icon">
+                                <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            </div>
+                            <h3>Existing User</h3>
+                            <p>Access your dashboard and manage metro operations with your existing credentials.</p>
+                            <a href="login.html" class="auth-btn login-btn">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                                <span>Sign In</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="auth-card signup-card">
+                        <div class="auth-card-content">
+                            <div class="auth-icon">
+                                <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            </div>
+                            <h3>New User</h3>
+                            <p>Join the Kochi Metro team and get access to our comprehensive operations platform.</p>
+                            <a href="signup.html" class="auth-btn signup-btn">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                                <span>Sign Up</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="auth-help">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <div>
+                            <h4>Need Help?</h4>
+                            <p>Contact your system administrator or visit our <a href="#" aria-label="Help documentation">help documentation</a> for assistance.</p>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="auth-card signup-card">
-                    <div class="auth-card-content">
-                        <i class="fas fa-user-plus auth-icon"></i>
-                        <h3>Employee Sign Up</h3>
-                        <p>Join the Kochi Metro team! Create your employee account to access operational tools and contribute to our mission.</p>
-                        <button class="auth-btn signup-btn">
-                            <i class="fas fa-user-plus"></i>
-                            Create Account
-                        </button>
+
+                <!-- Image Slideshow -->
+                <div class="slideshow-container">
+                    <div class="slideshow" id="slideshow">
+                        <div class="slide active">
+                            <img src="https://images.pexels.com/photos/378570/pexels-photo-378570.jpeg" alt="Modern metro train at station" loading="lazy">
+                            <div class="slide-caption">Modern Metro Infrastructure</div>
+                        </div>
+                        <div class="slide">
+                            <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg" alt="Metro station platform" loading="lazy">
+                            <div class="slide-caption">Efficient Transportation Network</div>
+                        </div>
+                        <div class="slide">
+                            <img src="https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg" alt="Metro control room" loading="lazy">
+                            <div class="slide-caption">Advanced Control Systems</div>
+                        </div>
+                    </div>
+                    
+                    <button class="slide-btn prev" id="prev-slide" aria-label="Previous slide">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button class="slide-btn next" id="next-slide" aria-label="Next slide">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="slide-dots" role="tablist" aria-label="Slideshow navigation">
+                        <button class="dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Slide 1"></button>
+                        <button class="dot" data-slide="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
+                        <button class="dot" data-slide="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
                     </div>
                 </div>
-                
-                <div class="auth-help">
-                    <i class="fas fa-question-circle"></i>
+
+                <!-- About Section -->
+                <section class="about-section">
+                    <div class="about-header">
+                        <h2>About Kochi Metro</h2>
+                        <div class="section-divider" aria-hidden="true"></div>
+                        <p>Kochi Metro Rail Corporation operates a state-of-the-art metro system serving the city of Kochi, Kerala. Our advanced operations center ensures safe, efficient, and reliable transportation for millions of passengers.</p>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                            </div>
+                            <h3>Safety First</h3>
+                            <p>Advanced safety systems and protocols ensure passenger security at all times.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-clock" aria-hidden="true"></i>
+                            </div>
+                            <h3>On-Time Performance</h3>
+                            <p>Real-time monitoring and optimization for consistent, reliable service.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-leaf" aria-hidden="true"></i>
+                            </div>
+                            <h3>Eco-Friendly</h3>
+                            <p>Sustainable transportation solution reducing carbon footprint.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                            </div>
+                            <h3>Smart Technology</h3>
+                            <p>Cutting-edge technology for seamless passenger experience.</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <div class="stat-item">
+                            <div class="stat-number">25</div>
+                            <div class="stat-label">Stations</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">25.6km</div>
+                            <div class="stat-label">Track Length</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100K+</div>
+                            <div class="stat-label">Daily Passengers</div>
+                        </div>
+                    </div>
+
+                    <div class="vision-section">
+                        <h3>Our Vision</h3>
+                        <p>To provide world-class metro rail services that connect communities, enhance mobility, and contribute to sustainable urban development in Kerala.</p>
+                    </div>
+                </section>
+
+                <!-- Content Page -->
+                <section class="content-page">
+                    <div class="content-grid">
+                        <div class="content-image">
+                            <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg" alt="Metro operations center" loading="lazy">
+                            <div class="image-caption">State-of-the-art Operations Control Center</div>
+                        </div>
+                        <div class="content-text">
+                            <h2>Advanced Operations Management</h2>
+                            <div class="text-content">
+                                <p>Our operations center utilizes cutting-edge technology to monitor and manage the entire metro network in real-time. From train scheduling to passenger safety, every aspect is carefully coordinated.</p>
+                                <p>The integrated dashboard provides comprehensive insights into system performance, enabling proactive maintenance and optimal resource allocation.</p>
+                            </div>
+                            
+                            <div class="achievements-box">
+                                <h3>Key Achievements</h3>
+                                <ul>
+                                    <li>99.5% on-time performance</li>
+                                    <li>Zero safety incidents in 2023</li>
+                                    <li>50% reduction in energy consumption</li>
+                                    <li>Award for Best Metro System in India</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-primary">Learn More</button>
+                                <button class="btn-secondary">Contact Us</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bottom Section -->
+                <div class="bottom-section">
+                    <!-- Latest Updates -->
+                    <section class="latest-updates">
+                        <div class="updates-header">
+                            <div class="updates-title">
+                                <div class="updates-icon">
+                                    <i class="fas fa-newspaper" aria-hidden="true"></i>
+                                </div>
+                                <h2>Latest Updates</h2>
+                            </div>
+                            <button class="view-all-btn">View All</button>
+                        </div>
+
+                        <div class="updates-list" id="updates-list">
+                            <!-- Updates will be populated by JavaScript -->
+                        </div>
+
+                        <div class="updates-footer">
+                            <div class="last-updated">Last updated: <span id="last-update-time">2 minutes ago</span></div>
+                            <button class="subscribe-btn">Subscribe to Updates</button>
+                        </div>
+                    </section>
+
+                    <!-- Quick Access -->
+                    <aside class="quick-access">
+                        <h3>Quick Access</h3>
+                        <div class="quick-access-items">
+                            <button class="quick-access-item" data-action="emergency">
+                                <div class="quick-access-title">Emergency Protocols</div>
+                                <div class="quick-access-desc">Access emergency procedures</div>
+                            </button>
+                            <button class="quick-access-item" data-action="maintenance">
+                                <div class="quick-access-title">Maintenance Schedule</div>
+                                <div class="quick-access-desc">View upcoming maintenance</div>
+                            </button>
+                            <button class="quick-access-item" data-action="reports">
+                                <div class="quick-access-title">Generate Reports</div>
+                                <div class="quick-access-desc">Create operational reports</div>
+                            </button>
+                            <button class="quick-access-item" data-action="settings">
+                                <div class="quick-access-title">System Settings</div>
+                                <div class="quick-access-desc">Configure system parameters</div>
+                            </button>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- Live Map Tab -->
+            <section id="live-map-tab" class="tab-content" role="tabpanel" aria-labelledby="live-map">
+                <div class="page-header">
                     <div>
-                        <h4>Need Help?</h4>
-                        <p>Contact IT Support: <a href="tel:+914842368200">+91 484 236 8200</a> | <a href="mailto:support@kochimetro.org">support@kochimetro.org</a></p>
+                        <h2>Live Metro Map</h2>
+                        <p>Real-time train positions and station status</p>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Image Slideshow -->
-            <div class="slideshow-container">
-                <div class="slideshow">
-                    <div class="slide active">
-                        <img src="https://images.pexels.com/photos/378570/pexels-photo-378570.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Modern metro train at station platform">
-                        <div class="slide-caption">State-of-the-art Metro Services</div>
-                    </div>
-                    <div class="slide">
-                        <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Metro railway tracks and infrastructure">
-                        <div class="slide-caption">Advanced Railway Infrastructure</div>
-                    </div>
-                    <div class="slide">
-                        <img src="https://images.pexels.com/photos/1267697/pexels-photo-1267697.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Urban metro station interior">
-                        <div class="slide-caption">Modern Station Facilities</div>
-                    </div>
-                    <div class="slide">
-                        <img src="https://images.pexels.com/photos/1267360/pexels-photo-1267360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Metro train in urban environment">
-                        <div class="slide-caption">Connecting Communities</div>
-                    </div>
-                </div>
-                
-                <button class="slide-btn prev" id="prev-slide">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="slide-btn next" id="next-slide">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                
-                <div class="slide-dots">
-                    <span class="dot active" data-slide="0"></span>
-                    <span class="dot" data-slide="1"></span>
-                    <span class="dot" data-slide="2"></span>
-                    <span class="dot" data-slide="3"></span>
-                </div>
-            </div>
-            
-            <!-- About Section -->
-            <div class="about-section">
-                <div class="about-header">
-                    <h2>About Kochi Metro Rail Corporation</h2>
-                    <div class="section-divider"></div>
-                    <p>Kochi Metro Rail Corporation Limited (KMRL) is a joint venture between the Government of India and the Government of Kerala, established to implement and operate the Kochi Metro Rail Project. Our mission is to provide safe, reliable, and sustainable urban transportation solutions that enhance the quality of life for the people of Kochi.</p>
-                </div>
-                
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-train"></i>
+                    <div class="status-legend">
+                        <div class="legend-item">
+                            <div class="status-dot running" aria-hidden="true"></div>
+                            <span>Running</span>
                         </div>
-                        <h3>Modern Fleet</h3>
-                        <p>State-of-the-art metro trains with advanced safety systems</p>
+                        <div class="legend-item">
+                            <div class="status-dot delayed" aria-hidden="true"></div>
+                            <span>Delayed</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="status-dot stopped" aria-hidden="true"></div>
+                            <span>Stopped</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <div class="metro-map" id="metro-map">
+                        <!-- SVG Metro Line will be inserted here by JavaScript -->
                     </div>
                     
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-users"></i>
+                    <div class="station-details" id="station-details">
+                        <div class="no-selection">
+                            <i class="fas fa-mouse-pointer" aria-hidden="true"></i>
+                            <p>Click on a station to view details</p>
                         </div>
-                        <h3>Serving Communities</h3>
-                        <p>Connecting millions of passengers across Kochi metropolitan area</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Strategic Network</h3>
-                        <p>Comprehensive route coverage linking key destinations</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <h3>Excellence</h3>
-                        <p>Committed to providing world-class public transportation</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3>Reliable Service</h3>
-                        <p>Punctual and efficient metro operations 365 days a year</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3>Safety First</h3>
-                        <p>Highest safety standards and security protocols</p>
-                    </div>
-                </div>
-                
-                <div class="stats-section">
-                    <div class="stat-item">
-                        <div class="stat-number">25.6 km</div>
-                        <div class="stat-label">Total Network Length</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">22</div>
-                        <div class="stat-label">Metro Stations</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100K+</div>
-                        <div class="stat-label">Daily Passengers</div>
-                    </div>
-                </div>
-                
-                <div class="vision-section">
-                    <h3>Our Vision</h3>
-                    <p>To be the preferred choice for urban mobility in Kochi by providing world-class metro rail services that are safe, reliable, comfortable, and environmentally sustainable, while contributing to the economic and social development of the region.</p>
-                </div>
-            </div>
-            
-            <!-- Content Page -->
-            <div class="content-page">
-                <div class="content-grid">
-                    <div class="content-image">
-                        <img src="https://images.pexels.com/photos/1267697/pexels-photo-1267697.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1" alt="Modern Kochi Metro station interior with passengers">
-                        <p class="image-caption">Modern metro station facilities designed for passenger comfort and safety</p>
-                    </div>
-                    
-                    <div class="content-text">
-                        <h2>Transforming Urban Mobility in Kochi</h2>
-                        <div class="section-divider"></div>
-                        
-                        <div class="text-content">
-                            <p>The Kochi Metro Rail system represents a revolutionary step forward in urban transportation for the city of Kochi. Since its inception, the metro has transformed the way people commute, offering a clean, efficient, and reliable alternative to traditional transportation methods.</p>
-                            
-                            <p>Our commitment to excellence extends beyond just moving passengers from point A to point B. We focus on creating an integrated transportation ecosystem that promotes sustainable urban development, reduces traffic congestion, and improves air quality throughout the metropolitan area.</p>
-                            
-                            <p>With cutting-edge technology, modern infrastructure, and a dedicated team of professionals, Kochi Metro continues to set new standards in public transportation. Our employee dashboard system ensures seamless operations, real-time monitoring, and efficient management of all metro services across the network.</p>
-                        </div>
-                        
-                        <div class="achievements-box">
-                            <h3>Key Achievements</h3>
-                            <ul>
-                                <li>First metro system in Kerala state</li>
-                                <li>ISO 9001:2015 certified operations</li>
-                                <li>Green building certified stations</li>
-                                <li>Award-winning safety protocols</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button class="btn-primary">Learn More</button>
-                            <button class="btn-secondary">View Routes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Latest Updates and Quick Access -->
-            <div class="bottom-section">
-                <div class="latest-updates">
-                    <div class="updates-header">
-                        <div class="updates-title">
-                            <div class="updates-icon">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <h2>Latest Updates</h2>
-                        </div>
-                        <button class="view-all-btn">View All Updates →</button>
-                    </div>
-                    
-                    <div class="updates-list">
-                        <div class="update-item">
-                            <div class="update-icon safety">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <div class="update-content">
-                                <div class="update-header">
-                                    <h3>New Safety Protocols Implemented</h3>
-                                    <span class="priority-badge high">high</span>
+                        <div class="station-info" style="display: none;">
+                            <h3 id="selected-station-name">Station Name</h3>
+                            <div class="station-stats">
+                                <div class="stat">
+                                    <span><i class="fas fa-users" aria-hidden="true"></i> Officers on Duty</span>
+                                    <strong id="station-officers">0</strong>
                                 </div>
-                                <p>Enhanced safety measures and emergency response procedures have been deployed across all metro stations.</p>
-                                <div class="update-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Jan 15, 2024</span>
-                                    <span><i class="fas fa-clock"></i> 10:30 AM</span>
+                                <div class="stat">
+                                    <span><i class="fas fa-train" aria-hidden="true"></i> Trains at Station</span>
+                                    <strong id="station-trains">0</strong>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="update-item">
-                            <div class="update-icon service">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="update-content">
-                                <div class="update-header">
-                                    <h3>Extended Service Hours During Festival Season</h3>
-                                    <span class="priority-badge medium">medium</span>
-                                </div>
-                                <p>Metro services will operate until 11:30 PM during the upcoming festival period to accommodate increased passenger traffic.</p>
-                                <div class="update-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Jan 12, 2024</span>
-                                    <span><i class="fas fa-clock"></i> 2:15 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="update-item">
-                            <div class="update-icon technology">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
-                            <div class="update-content">
-                                <div class="update-header">
-                                    <h3>Digital Ticketing System Upgrade Complete</h3>
-                                    <span class="priority-badge medium">medium</span>
-                                </div>
-                                <p>The new digital ticketing system is now fully operational, offering faster transactions and improved user experience.</p>
-                                <div class="update-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Jan 10, 2024</span>
-                                    <span><i class="fas fa-clock"></i> 9:45 AM</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="update-item">
-                            <div class="update-icon maintenance">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="update-content">
-                                <div class="update-header">
-                                    <h3>Monthly Maintenance Schedule - Line 1</h3>
-                                    <span class="priority-badge low">low</span>
-                                </div>
-                                <p>Scheduled maintenance work on Line 1 will be conducted during off-peak hours this weekend.</p>
-                                <div class="update-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Jan 8, 2024</span>
-                                    <span><i class="fas fa-clock"></i> 4:20 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="update-item">
-                            <div class="update-icon training">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
-                            <div class="update-content">
-                                <div class="update-header">
-                                    <h3>Employee Training Program Launch</h3>
-                                    <span class="priority-badge medium">medium</span>
-                                </div>
-                                <p>New comprehensive training program for all operational staff begins next week, focusing on customer service excellence.</p>
-                                <div class="update-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Jan 5, 2024</span>
-                                    <span><i class="fas fa-clock"></i> 11:00 AM</span>
+                                <div class="stat">
+                                    <span><i class="fas fa-clock" aria-hidden="true"></i> Last Update</span>
+                                    <strong>2 min ago</strong>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="updates-footer">
-                        <span class="last-updated">Last updated: <span id="current-time"></span></span>
-                        <button class="subscribe-btn">Subscribe to Updates</button>
-                    </div>
                 </div>
-                
-                <div class="quick-access">
-                    <h3>Quick Access</h3>
-                    <div class="quick-access-items">
-                        <button class="quick-access-item" data-tab="live-map">
-                            <div class="quick-access-title">Live Metro Map</div>
-                            <div class="quick-access-desc">View real-time train positions</div>
-                        </button>
-                        <button class="quick-access-item" data-tab="train-status">
-                            <div class="quick-access-title">Train Operations</div>
-                            <div class="quick-access-desc">Monitor train status and schedules</div>
-                        </button>
-                        <button class="quick-access-item" data-tab="verify-ops">
-                            <div class="quick-access-title">Verify Operations</div>
-                            <div class="quick-access-desc">Review stopped trains</div>
-                        </button>
-                        <button class="quick-access-item" data-tab="officers">
-                            <div class="quick-access-title">Officer Directory</div>
-                            <div class="quick-access-desc">Contact on-duty personnel</div>
-                        </button>
+
+                <section class="train-summary">
+                    <h3>Active Trains</h3>
+                    <div class="train-cards" id="train-cards">
+                        <!-- Train cards will be populated by JavaScript -->
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Live Map Tab -->
-        <div class="tab-content" id="live-map-tab">
-            <div class="page-header">
-                <h2>Live Metro Map</h2>
-                <div class="status-legend">
-                    <div class="legend-item">
-                        <div class="status-dot running"></div>
-                        <span>Running</span>
+                </section>
+            </section>
+
+            <!-- Train Operations Tab -->
+            <section id="train-operations-tab" class="tab-content" role="tabpanel" aria-labelledby="train-operations">
+                <div class="page-header">
+                    <div>
+                        <h2>Train Operations</h2>
+                        <p>Monitor and manage all train operations</p>
                     </div>
-                    <div class="legend-item">
-                        <div class="status-dot delayed"></div>
-                        <span>Delayed</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="status-dot stopped"></div>
-                        <span>Stopped</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="map-container">
-                <div class="metro-map">
-                    <svg class="metro-line" viewBox="0 0 800 400">
-                        <defs>
-                            <linearGradient id="metroLine" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#14B8A6" />
-                                <stop offset="100%" stop-color="#0891B2" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M 50 50 Q 200 100 400 200 Q 600 300 750 350" stroke="url(#metroLine)" stroke-width="6" fill="none" />
-                    </svg>
-                    
-                    <!-- Stations -->
-                    <div class="station" style="left: 50px; top: 50px;" data-station="Aluva">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Aluva</div>
-                    </div>
-                    <div class="station" style="left: 120px; top: 70px;" data-station="Pulinchodu">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Pulinchodu</div>
-                    </div>
-                    <div class="station" style="left: 190px; top: 90px;" data-station="Kalamassery">
-                        <div class="station-dot issue"></div>
-                        <div class="station-name">Kalamassery</div>
-                        <i class="fas fa-exclamation-triangle station-alert"></i>
-                    </div>
-                    <div class="station" style="left: 260px; top: 120px;" data-station="Cusat">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Cusat</div>
-                    </div>
-                    <div class="station" style="left: 330px; top: 150px;" data-station="Edapally">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Edapally</div>
-                    </div>
-                    <div class="station" style="left: 400px; top: 180px;" data-station="Palarivattom">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Palarivattom</div>
-                    </div>
-                    <div class="station" style="left: 470px; top: 220px;" data-station="Kaloor">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Kaloor</div>
-                    </div>
-                    <div class="station" style="left: 540px; top: 260px;" data-station="MG Road">
-                        <div class="station-dot"></div>
-                        <div class="station-name">MG Road</div>
-                    </div>
-                    <div class="station" style="left: 610px; top: 300px;" data-station="Ernakulam South">
-                        <div class="station-dot"></div>
-                        <div class="station-name">Ernakulam South</div>
-                    </div>
-                    
-                    <!-- Trains -->
-                    <div class="train running" style="left: 540px; top: 260px;" data-train="K-101">
-                        <div class="train-icon">
-                            <i class="fas fa-train"></i>
-                        </div>
-                        <div class="train-label">K-101</div>
-                    </div>
-                    <div class="train delayed" style="left: 190px; top: 90px;" data-train="K-102">
-                        <div class="train-icon">
-                            <i class="fas fa-train"></i>
-                        </div>
-                        <div class="train-label">K-102 (+5min)</div>
-                    </div>
-                    <div class="train stopped" style="left: 330px; top: 150px;" data-train="K-103">
-                        <div class="train-icon">
-                            <i class="fas fa-train"></i>
-                        </div>
-                        <div class="train-label">K-103</div>
-                    </div>
-                </div>
-                
-                <div class="station-details" id="station-details">
-                    <h3>Station Details</h3>
-                    <div class="no-selection">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <p>Click on a station to view details</p>
-                    </div>
-                    <div class="station-info" style="display: none;">
-                        <h4 id="selected-station-name"></h4>
-                        <div class="station-stats">
-                            <div class="stat">
-                                <i class="fas fa-users"></i>
-                                <span>On-duty Officers</span>
-                                <strong id="station-officers">0</strong>
-                            </div>
-                            <div class="stat">
-                                <i class="fas fa-train"></i>
-                                <span>Trains Present</span>
-                                <strong id="station-trains">0</strong>
-                            </div>
-                            <div class="stat">
-                                <i class="fas fa-clock"></i>
-                                <span>Last Update</span>
-                                <strong>1 min ago</strong>
-                            </div>
-                        </div>
-                        <button class="btn-primary">View Station Details</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="train-summary">
-                <h3>Active Trains</h3>
-                <div class="train-cards">
-                    <div class="train-card">
-                        <div class="train-status running"></div>
-                        <div class="train-info">
-                            <h4>K-101</h4>
-                            <p>MG Road</p>
-                            <span class="status-text">Running</span>
-                        </div>
-                    </div>
-                    <div class="train-card">
-                        <div class="train-status delayed"></div>
-                        <div class="train-info">
-                            <h4>K-102</h4>
-                            <p>Kalamassery</p>
-                            <span class="status-text">Delayed by 5 minutes</span>
-                        </div>
-                    </div>
-                    <div class="train-card">
-                        <div class="train-status stopped"></div>
-                        <div class="train-info">
-                            <h4>K-103</h4>
-                            <p>Edapally</p>
-                            <span class="status-text">Stopped</span>
-                        </div>
-                    </div>
-                    <div class="train-card">
-                        <div class="train-status running"></div>
-                        <div class="train-info">
-                            <h4>K-104</h4>
-                            <p>Town Hall</p>
-                            <span class="status-text">Running</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Train Operations Tab -->
-        <div class="tab-content" id="train-status-tab">
-            <div class="page-header">
-                <h2>Train Operations</h2>
-                <button class="btn-primary" id="add-train-btn">
-                    <i class="fas fa-plus"></i>
-                    Add Train
-                </button>
-            </div>
-            
-            <div class="operations-controls">
-                <div class="status-filters">
-                    <button class="filter-btn active" data-filter="all">All Trains (5)</button>
-                    <button class="filter-btn" data-filter="running">Running (2)</button>
-                    <button class="filter-btn" data-filter="delayed">Delayed (1)</button>
-                    <button class="filter-btn" data-filter="stopped">Stopped (1)</button>
-                    <button class="filter-btn" data-filter="maintenance">Maintenance (1)</button>
-                </div>
-                
-                <div class="search-controls">
-                    <div class="search-input">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search trains, drivers, stations..." id="train-search">
-                    </div>
-                    <button class="icon-btn">
-                        <i class="fas fa-filter"></i>
+                    <button class="btn-primary" id="add-train-btn">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                        <span>Add Train</span>
                     </button>
                 </div>
-            </div>
-            
-            <div class="trains-list" id="trains-list">
-                <div class="train-item" data-status="running">
-                    <div class="train-header">
-                        <div class="train-status-icon running">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3>K-101</h3>
-                        <span class="status-badge running">Running</span>
-                    </div>
-                    <div class="train-details">
-                        <div class="detail-item">
-                            <span class="label">Route:</span>
-                            <span class="value">Aluva → Ernakulam South</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Current Station:</span>
-                            <span class="value">MG Road</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Driver:</span>
-                            <span class="value">Rajesh Kumar</span>
-                        </div>
-                    </div>
-                    <div class="train-actions">
-                        <span class="last-update">Last updated: 2 min ago</span>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-info">View Details</button>
-                            <button class="btn-small btn-secondary">Update Status</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="train-item" data-status="delayed">
-                    <div class="train-header">
-                        <div class="train-status-icon delayed">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3>K-102</h3>
-                        <span class="status-badge delayed">Delayed</span>
-                        <span class="delay-info">+5 min delayed</span>
-                    </div>
-                    <div class="train-details">
-                        <div class="detail-item">
-                            <span class="label">Route:</span>
-                            <span class="value">Ernakulam South → Aluva</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Current Station:</span>
-                            <span class="value">Kalamassery</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Driver:</span>
-                            <span class="value">Suresh Nair</span>
-                        </div>
-                    </div>
-                    <div class="issues-section">
-                        <h4>Active Issues:</h4>
-                        <ul>
-                            <li>Technical delay at signal</li>
-                        </ul>
-                    </div>
-                    <div class="train-actions">
-                        <span class="last-update">Last updated: 1 min ago</span>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-info">View Details</button>
-                            <button class="btn-small btn-secondary">Update Status</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="train-item" data-status="stopped">
-                    <div class="train-header">
-                        <div class="train-status-icon stopped">
-                            <i class="fas fa-times-circle"></i>
-                        </div>
-                        <h3>K-103</h3>
-                        <span class="status-badge stopped">Stopped</span>
-                    </div>
-                    <div class="train-details">
-                        <div class="detail-item">
-                            <span class="label">Route:</span>
-                            <span class="value">Aluva → Ernakulam South</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Current Station:</span>
-                            <span class="value">Edapally</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Driver:</span>
-                            <span class="value">Manoj Thomas</span>
-                        </div>
-                    </div>
-                    <div class="issues-section">
-                        <h4>Active Issues:</h4>
-                        <ul>
-                            <li>Passenger medical emergency</li>
-                            <li>Awaiting clearance</li>
-                        </ul>
-                    </div>
-                    <div class="train-actions">
-                        <span class="last-update">Last updated: 15 min ago</span>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-info">View Details</button>
-                            <button class="btn-small btn-secondary">Update Status</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="train-item" data-status="running">
-                    <div class="train-header">
-                        <div class="train-status-icon running">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3>K-104</h3>
-                        <span class="status-badge running">Running</span>
-                    </div>
-                    <div class="train-details">
-                        <div class="detail-item">
-                            <span class="label">Route:</span>
-                            <span class="value">Ernakulam South → Aluva</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Current Station:</span>
-                            <span class="value">Town Hall</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Driver:</span>
-                            <span class="value">Vinod Kumar</span>
-                        </div>
-                    </div>
-                    <div class="train-actions">
-                        <span class="last-update">Last updated: 30 sec ago</span>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-info">View Details</button>
-                            <button class="btn-small btn-secondary">Update Status</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="train-item" data-status="maintenance">
-                    <div class="train-header">
-                        <div class="train-status-icon maintenance">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <h3>K-105</h3>
-                        <span class="status-badge maintenance">Maintenance</span>
-                    </div>
-                    <div class="train-details">
-                        <div class="detail-item">
-                            <span class="label">Route:</span>
-                            <span class="value">Aluva → Ernakulam South</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Current Station:</span>
-                            <span class="value">Depot</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Driver:</span>
-                            <span class="value">N/A</span>
-                        </div>
-                    </div>
-                    <div class="issues-section">
-                        <h4>Active Issues:</h4>
-                        <ul>
-                            <li>Scheduled maintenance</li>
-                        </ul>
-                    </div>
-                    <div class="train-actions">
-                        <span class="last-update">Last updated: 2 hours ago</span>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-info">View Details</button>
-                            <button class="btn-small btn-secondary">Update Status</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Verify Operations Tab -->
-        <div class="tab-content" id="verify-ops-tab">
-            <div class="page-header">
-                <div>
-                    <h2>Verify Operations</h2>
-                    <p>Review and verify stopped trains requiring attention</p>
-                </div>
-                <div class="verification-count">3 trains require verification</div>
-            </div>
-            
-            <div class="priority-summary">
-                <div class="priority-card high">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <div class="priority-label">High Priority</div>
-                        <div class="priority-count">1 trains</div>
-                    </div>
-                </div>
-                <div class="priority-card medium">
-                    <i class="fas fa-clock"></i>
-                    <div>
-                        <div class="priority-label">Medium Priority</div>
-                        <div class="priority-count">1 trains</div>
-                    </div>
-                </div>
-                <div class="priority-card low">
-                    <i class="fas fa-shield-alt"></i>
-                    <div>
-                        <div class="priority-label">Low Priority</div>
-                        <div class="priority-count">1 trains</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="verification-list">
-                <div class="verification-item">
-                    <div class="verification-header">
-                        <h3>K-103</h3>
-                        <div class="priority-badge high">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>High Priority</span>
-                        </div>
-                        <span class="duration">Stopped for 15 minutes</span>
-                    </div>
-                    
-                    <div class="verification-details">
-                        <div class="detail-row">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <span class="label">Location:</span>
-                                    <span class="value">Edapally</span>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-clock"></i>
-                                <div>
-                                    <span class="label">Last Contact:</span>
-                                    <span class="value">2 min ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="issue-description">
-                            <h4>Issue Description:</h4>
-                            <p>Passenger fell ill on platform. Medical team dispatched. Train held for safety.</p>
-                        </div>
-                        
-                        <div class="verification-grid">
-                            <div class="officers-section">
-                                <h4><i class="fas fa-users"></i> On-site Officers</h4>
-                                <div class="officer-list">
-                                    <div class="officer-item">
-                                        <div class="status-dot active"></div>
-                                        <span>Ravi Kumar</span>
-                                    </div>
-                                    <div class="officer-item">
-                                        <div class="status-dot active"></div>
-                                        <span>Priya Nair</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="actions-section">
-                                <h4>Actions Taken:</h4>
-                                <div class="action-list">
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Medical team contacted</span>
-                                    </div>
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Passengers informed</span>
-                                    </div>
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Alternative arrangements being made</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="verification-actions">
-                        <button class="btn-verify" data-train="K-103">
-                            <i class="fas fa-shield-alt"></i>
-                            Verify
-                        </button>
-                        <button class="btn-contact">Contact Officer</button>
-                        <button class="btn-update">Update Status</button>
-                    </div>
-                </div>
-                
-                <div class="verification-item">
-                    <div class="verification-header">
-                        <h3>K-107</h3>
-                        <div class="priority-badge medium">
-                            <i class="fas fa-clock"></i>
-                            <span>Medium Priority</span>
-                        </div>
-                        <span class="duration">Stopped for 8 minutes</span>
-                    </div>
-                    
-                    <div class="verification-details">
-                        <div class="detail-row">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <span class="label">Location:</span>
-                                    <span class="value">Kalamassery</span>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-clock"></i>
-                                <div>
-                                    <span class="label">Last Contact:</span>
-                                    <span class="value">5 min ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="issue-description">
-                            <h4>Issue Description:</h4>
-                            <p>Automated signal system showing fault. Manual override procedures initiated.</p>
-                        </div>
-                        
-                        <div class="verification-grid">
-                            <div class="officers-section">
-                                <h4><i class="fas fa-users"></i> On-site Officers</h4>
-                                <div class="officer-list">
-                                    <div class="officer-item">
-                                        <div class="status-dot active"></div>
-                                        <span>Sunil Jose</span>
-                                    </div>
-                                    <div class="officer-item">
-                                        <div class="status-dot active"></div>
-                                        <span>Maya Krishnan</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="actions-section">
-                                <h4>Actions Taken:</h4>
-                                <div class="action-list">
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Technical team notified</span>
-                                    </div>
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Manual signal operation active</span>
-                                    </div>
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Monitoring system status</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="verification-actions">
-                        <button class="btn-verify" data-train="K-107">
-                            <i class="fas fa-shield-alt"></i>
-                            Verify
-                        </button>
-                        <button class="btn-contact">Contact Officer</button>
-                        <button class="btn-update">Update Status</button>
-                    </div>
-                </div>
-                
-                <div class="verification-item">
-                    <div class="verification-header">
-                        <h3>K-109</h3>
-                        <div class="priority-badge low">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Low Priority</span>
-                        </div>
-                        <span class="duration">Stopped for 3 minutes</span>
-                    </div>
-                    
-                    <div class="verification-details">
-                        <div class="detail-row">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <span class="label">Location:</span>
-                                    <span class="value">MG Road</span>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-clock"></i>
-                                <div>
-                                    <span class="label">Last Contact:</span>
-                                    <span class="value">1 min ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="issue-description">
-                            <h4>Issue Description:</h4>
-                            <p>Platform overcrowding during peak hours. Managing passenger flow.</p>
-                        </div>
-                        
-                        <div class="verification-grid">
-                            <div class="officers-section">
-                                <h4><i class="fas fa-users"></i> On-site Officers</h4>
-                                <div class="officer-list">
-                                    <div class="officer-item">
-                                        <div class="status-dot active"></div>
-                                        <span>Anoop Menon</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="actions-section">
-                                <h4>Actions Taken:</h4>
-                                <div class="action-list">
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Additional security deployed</span>
-                                    </div>
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Passenger flow management active</span>
-                                    </div>
-                                    <div class="action-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Next train ETA communicated</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="verification-actions">
-                        <button class="btn-verify" data-train="K-109">
-                            <i class="fas fa-shield-alt"></i>
-                            Verify
-                        </button>
-                        <button class="btn-contact">Contact Officer</button>
-                        <button class="btn-update">Update Status</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Other Tabs (Placeholder) -->
-        <div class="tab-content" id="officers-tab">
-            <div class="page-header">
-                <h2>Officer Directory</h2>
-            </div>
-            <div class="placeholder-content">
-                <p>Officer directory functionality coming soon...</p>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="history-tab">
-            <div class="page-header">
-                <h2>History & Records</h2>
-            </div>
-            <div class="placeholder-content">
-                <p>History and records functionality coming soon...</p>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="incidents-tab">
-            <div class="page-header">
-                <h2>Incident Log</h2>
-            </div>
-            <div class="placeholder-content">
-                <p>Incident log functionality coming soon...</p>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="reports-tab">
-            <div class="page-header">
-                <h2>Reports</h2>
-            </div>
-            <div class="placeholder-content">
-                <p>Reports functionality coming soon...</p>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="settings-tab">
-            <div class="page-header">
-                <h2>Settings</h2>
-            </div>
-            <div class="placeholder-content">
-                <p>Settings functionality coming soon...</p>
-            </div>
-        </div>
-    </main>
 
-    <!-- QR Scanner Modal -->
-    <div class="modal" id="qr-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fas fa-qrcode"></i>
-                    <h3>QR Code Scanner</h3>
-                </div>
-                <button class="modal-close" id="qr-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="modal-body">
-                <div class="scan-modes">
-                    <label>Scan Purpose</label>
-                    <div class="scan-mode-options">
-                        <button class="scan-mode active" data-mode="auth">
-                            <i class="fas fa-user"></i>
-                            <span>Employee Authentication</span>
-                        </button>
-                        <button class="scan-mode" data-mode="incident">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>Incident Reporting</span>
-                        </button>
-                        <button class="scan-mode" data-mode="train">
-                            <i class="fas fa-train"></i>
-                            <span>Train Identification</span>
-                        </button>
+                <div class="operations-controls">
+                    <div class="status-filters">
+                        <button class="filter-btn active" data-filter="all">All Trains</button>
+                        <button class="filter-btn" data-filter="running">Running</button>
+                        <button class="filter-btn" data-filter="delayed">Delayed</button>
+                        <button class="filter-btn" data-filter="stopped">Stopped</button>
+                        <button class="filter-btn" data-filter="maintenance">Maintenance</button>
+                    </div>
+                    
+                    <div class="search-controls">
+                        <div class="search-input">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input 
+                                type="search" 
+                                id="train-search" 
+                                placeholder="Search trains..."
+                                aria-label="Search trains"
+                            >
+                        </div>
                     </div>
                 </div>
-                
-                <div class="scanner-area">
-                    <div class="scanner-frame">
-                        <i class="fas fa-camera"></i>
-                        <p>Point camera at QR code</p>
-                        <button class="btn-primary" id="simulate-scan">Simulate Scan</button>
+
+                <div class="trains-list" id="trains-list">
+                    <!-- Train items will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Verify Operations Tab -->
+            <section id="verify-operations-tab" class="tab-content" role="tabpanel" aria-labelledby="verify-operations">
+                <div class="page-header">
+                    <div>
+                        <h2>Verify Operations</h2>
+                        <p>Review and verify operational activities</p>
+                    </div>
+                    <div class="verification-count">
+                        <span id="pending-verifications">5</span> pending verifications
                     </div>
                 </div>
-                
-                <div class="scan-result" id="scan-result" style="display: none;">
-                    <h4>Scan Successful!</h4>
-                    <p id="scan-data"></p>
+
+                <div class="priority-summary">
+                    <div class="priority-card high">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        <div>
+                            <div class="priority-label">High Priority</div>
+                            <div class="priority-count">2 items</div>
+                        </div>
+                    </div>
+                    <div class="priority-card medium">
+                        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                        <div>
+                            <div class="priority-label">Medium Priority</div>
+                            <div class="priority-count">2 items</div>
+                        </div>
+                    </div>
+                    <div class="priority-card low">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <div>
+                            <div class="priority-label">Low Priority</div>
+                            <div class="priority-count">1 item</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="verification-list" id="verification-list">
+                    <!-- Verification items will be populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Modals -->
+        <!-- QR Scanner Modal -->
+        <div class="modal" id="qr-scanner-modal" role="dialog" aria-labelledby="qr-scanner-title" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-qrcode" aria-hidden="true"></i>
+                        <h3 id="qr-scanner-title">QR Code Scanner</h3>
+                    </div>
+                    <button class="modal-close" id="qr-scanner-close" aria-label="Close QR scanner">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="scan-modes">
+                        <label>Select scan mode:</label>
+                        <div class="scan-mode-options">
+                            <button class="scan-mode active" data-mode="train">
+                                <i class="fas fa-train" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Train QR Code</strong>
+                                    <p>Scan train identification codes</p>
+                                </div>
+                            </button>
+                            <button class="scan-mode" data-mode="station">
+                                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Station QR Code</strong>
+                                    <p>Scan station identification codes</p>
+                                </div>
+                            </button>
+                            <button class="scan-mode" data-mode="maintenance">
+                                <i class="fas fa-tools" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Maintenance QR Code</strong>
+                                    <p>Scan maintenance equipment codes</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-area">
+                        <div class="scanner-frame">
+                            <i class="fas fa-camera" aria-hidden="true"></i>
+                            <p>Position QR code within the frame</p>
+                            <button class="btn-primary" id="start-scan">Start Scanning</button>
+                        </div>
+                    </div>
+                    
+                    <div class="scan-result" id="scan-result" style="display: none;">
+                        <h4>Scan Result</h4>
+                        <p id="scan-data">QR code data will appear here</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="cancel-scan">Cancel</button>
+                    <button class="btn-primary" id="process-scan" style="display: none;">Process</button>
                 </div>
             </div>
-            
-            <div class="modal-footer">
-                <button class="btn-primary" id="process-scan" style="display: none;">Process Scan</button>
-                <button class="btn-secondary" id="close-scanner">Close</button>
+        </div>
+
+        <!-- Add Train Modal -->
+        <div class="modal" id="add-train-modal" role="dialog" aria-labelledby="add-train-title" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                        <h3 id="add-train-title">Add New Train</h3>
+                    </div>
+                    <button class="modal-close" id="add-train-close" aria-label="Close add train modal">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-train-form">
+                        <div class="form-group">
+                            <label for="train-id">Train ID</label>
+                            <input type="text" id="train-id" name="trainId" required placeholder="e.g., KM-001">
+                        </div>
+                        <div class="form-group">
+                            <label for="train-driver">Driver Name</label>
+                            <input type="text" id="train-driver" name="driverName" required placeholder="Enter driver name">
+                        </div>
+                        <div class="form-group">
+                            <label for="train-route">Route</label>
+                            <select id="train-route" name="route" required>
+                                <option value="">Select Route</option>
+                                <option value="aluva-pettah">Aluva - Pettah</option>
+                                <option value="pettah-aluva">Pettah - Aluva</option>
+                            </select>
+                        </div>
+                        <div class="warning-box">
+                            <p>Please ensure all train details are accurate before adding to the system.</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="cancel-add-train">Cancel</button>
+                    <button class="btn-primary" id="submit-train">Add Train</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verification Modal -->
+        <div class="modal" id="verification-modal" role="dialog" aria-labelledby="verification-title" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                        <h3 id="verification-title">Verify Operation</h3>
+                    </div>
+                    <button class="modal-close" id="verification-close" aria-label="Close verification modal">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to verify the operation for train <strong id="verify-train-id">KM-001</strong>?</p>
+                    <div class="warning-box">
+                        <p>This action cannot be undone. Please ensure all checks have been completed.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="cancel-verification">Cancel</button>
+                    <button class="btn-primary" id="confirm-verification">Confirm Verification</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Verification Modal -->
-    <div class="modal" id="verification-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>Verify Operations</h3>
-                </div>
-                <button class="modal-close" id="verification-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="modal-body">
-                <p>Are you sure you want to verify the operations for train <strong id="verify-train-id"></strong>?</p>
-                <div class="warning-box">
-                    <p>This will mark the current situation as verified and may trigger automated responses.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Verification Notes (Optional)</label>
-                    <textarea id="verification-notes" placeholder="Add any additional notes about the verification..."></textarea>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn-primary" id="confirm-verification">
-                    <i class="fas fa-shield-alt"></i>
-                    Confirm Verification
-                </button>
-                <button class="btn-secondary" id="cancel-verification">Cancel</button>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Add Train Modal -->
-    <div class="modal" id="add-train-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fas fa-plus"></i>
-                    <h3>Add New Train</h3>
-                </div>
-                <button class="modal-close" id="add-train-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="modal-body">
-                <form id="add-train-form">
-                    <div class="form-group">
-                        <label>Train ID</label>
-                        <input type="text" id="train-id" placeholder="K-106" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Driver</label>
-                        <input type="text" id="train-driver" placeholder="Driver Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Route</label>
-                        <select id="train-route" required>
-                            <option value="">Select Route</option>
-                            <option value="Aluva → Ernakulam South">Aluva → Ernakulam South</option>
-                            <option value="Ernakulam South → Aluva">Ernakulam South → Aluva</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn-primary" id="submit-train">Add Train</button>
-                <button class="btn-secondary" id="cancel-add-train">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script src="auth.js"></script>
-    <script>
-        // Check authentication status on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateAuthUI();
-        });
-        
-        function updateAuthUI() {
-            const authButtons = document.getElementById('auth-buttons');
-            const userMenu = document.getElementById('user-menu');
-            const userName = document.getElementById('user-name');
-            const userRole = document.getElementById('user-role');
-            
-            if (checkAuthStatus()) {
-                // User is logged in
-                authButtons.style.display = 'none';
-                userMenu.style.display = 'flex';
-                userName.textContent = currentUser.name;
-                userRole.textContent = currentUser.role;
-            } else {
-                // User is not logged in
-                authButtons.style.display = 'flex';
-                userMenu.style.display = 'none';
-            }
-        }
-    </script>
+    <!-- Scripts -->
+    <script src="js/utils/constants.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/api.js"></script>
+    <script src="js/components/toast.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/components/slideshow.js"></script>
+    <script src="js/components/navigation.js"></script>
+    <script src="js/components/search.js"></script>
+    <script src="js/components/notifications.js"></script>
+    <script src="js/modules/auth.js"></script>
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/modules/liveMap.js"></script>
+    <script src="js/modules/trainOperations.js"></script>
+    <script src="js/modules/verifyOperations.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
